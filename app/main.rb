@@ -113,7 +113,14 @@ def render(args)
 end
 
 def render_map(args)
-  args.outputs.solids << [0, 0, args.state.map.width, args.state.map.height, 200, 200, 200]
+  args.outputs.background_color = [0, 0, 0]
+  args.outputs.solids << [
+    -args.state.camera.x,
+    -args.state.camera.y,
+    args.state.map.width,
+    args.state.map.height,
+    200, 200, 200
+  ]
 end
 
 def render_player(args)
