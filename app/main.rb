@@ -94,7 +94,15 @@ def fire_weapon(args)
   args.state.weapon.cooldown -= 1 if args.state.weapon.cooldown > 0
 
   if args.state.weapon.cooldown <= 0 && !args.state.enemies.empty?
-    target = args.state.enemies.sample
+    nearest_enemies = args.state.enemies.select { |enemy|
+      distance = Math.sqrt((enemy.x - args.state.player.x)**2 + (enemy.y - args.state.player.y)**2)
+      distance <= 200
+    }.sort_by { |enemy|
+      Math.sqrt((enemy.x - args.state.player.x)**2 + (enemy.y - args.state.player.y)**2)
+    }.first(5)
+    target = nearest_enemies.sample
+    return if target.nil?
+
     angle = Math.atan2(target.y - args.state.player.y, target.x - args.state.player.x)
     args.state.projectiles << {
       x: args.state.player.x, y: args.state.player.y,
