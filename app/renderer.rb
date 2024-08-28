@@ -30,8 +30,8 @@ class Renderer
   end
 
   def render_enemies(args)
-    args.state.enemies.each do |enemy|
-      args.outputs.sprites << [
+    enemy_sprites = args.state.enemies.map do |enemy|
+      [
         enemy.x - args.state.camera.x,
         enemy.y - args.state.camera.y,
         enemy.w,
@@ -39,11 +39,12 @@ class Renderer
         'sprites/enemy.png'
       ]
     end
+    args.outputs.sprites << enemy_sprites
   end
 
   def render_projectiles(args)
-    args.state.projectiles.each do |projectile|
-      args.outputs.sprites << [
+    projectile_sprites = args.state.projectiles.map do |projectile|
+      [
         projectile.x - args.state.camera.x,
         projectile.y - args.state.camera.y,
         projectile.w,
@@ -51,6 +52,7 @@ class Renderer
         'sprites/projectile.png'
       ]
     end
+    args.outputs.sprites << projectile_sprites
   end
 
   def render_label_with_shadow(args, x, y, text, size = 0)
