@@ -118,6 +118,7 @@ def render(args)
   render_enemies(args)
   render_projectiles(args)
   render_ui(args)
+  render_survival_time(args)
 end
 
 def render_map(args)
@@ -173,4 +174,12 @@ end
 def render_ui(args)
   render_label_with_shadow(args, 10, 710, "HP: #{args.state.player.hp}/#{args.state.player.max_hp}")
   render_label_with_shadow(args, 10, 690, "Enemies: #{args.state.enemies.length}")
+end
+
+def render_survival_time(args)
+  survival_time = args.state.tick_count / 60  # Convert ticks to seconds
+  minutes = survival_time / 60
+  seconds = survival_time % 60
+  time_text = format('%02d:%02d', minutes, seconds)
+  render_label_with_shadow(args, 640, 700, time_text, 5)
 end
