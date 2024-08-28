@@ -9,7 +9,7 @@ end
 
 def init(args)
   args.state.player = {
-    x: 640, y: 360, w: 50, h: 50,
+    x: 640, y: 360, w: 32, h: 32,
     speed: 5, hp: 100, max_hp: 100
   }
   args.state.enemies = []
@@ -47,11 +47,11 @@ def update_camera(args)
 end
 
 def spawn_enemies(args)
-  if args.state.enemies.length < 10 && args.state.tick_count % 60 == 0
+  if args.state.enemies.length < 1000 && args.state.tick_count % 20 == 0
     args.state.enemies << {
       x: rand(args.state.map.width),
       y: rand(args.state.map.height),
-      w: 30, h: 30, speed: 2, hp: 1
+      w: 16, h: 16, speed: 0.3, hp: 1
     }
   end
 end
@@ -106,7 +106,7 @@ def fire_weapon(args)
     angle = Math.atan2(target.y - args.state.player.y, target.x - args.state.player.x)
     args.state.projectiles << {
       x: args.state.player.x, y: args.state.player.y,
-      w: 10, h: 10, dx: Math.cos(angle) * 4, dy: Math.sin(angle) * 4
+      w: 16, h: 16, dx: Math.cos(angle) * 4, dy: Math.sin(angle) * 4
     }
     args.state.weapon.cooldown = args.state.weapon.max_cooldown
   end
@@ -165,7 +165,12 @@ def render_projectiles(args)
   end
 end
 
+def render_label_with_shadow(args, x, y, text, size = 0)
+  args.outputs.labels << [x + 1, y - 1, text, size, 0, 0, 0, 0]  # Black shadow
+  args.outputs.labels << [x, y, text, size, 255, 255, 255, 255]  # White text
+end
+
 def render_ui(args)
-  args.outputs.labels << [10, 710, "HP: #{args.state.player.hp}/#{args.state.player.max_hp}"]
-  args.outputs.labels << [10, 690, "Enemies: #{args.state.enemies.length}"]
+  render_label_with_shadow(args, 10, 710, "HP: #{args.state.player.hp}/#{args.state.player.max_hp}")
+  render_label_with_shadow(args, 10, 690, "Enemies: #{args.state.enemies.length}")
 end
