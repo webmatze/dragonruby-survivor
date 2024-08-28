@@ -18,6 +18,11 @@ def init(args)
   args.state.camera = { x: 0, y: 0 }
   args.state.map = { width: 2000, height: 2000 }
   args.state.weapon = { cooldown: 0, max_cooldown: 90 }
+  args.state.start_tick_count = args.state.tick_count
+end
+
+def restart(args)
+  init(args)
 end
 
 def handle_input(args)
@@ -30,6 +35,9 @@ def handle_input(args)
   # Keep player within map bounds
   player.x = player.x.clamp(0, args.state.map.width - player.w)
   player.y = player.y.clamp(0, args.state.map.height - player.h)
+
+  # Restart the game when 'R' key is pressed
+  restart(args) if args.inputs.keyboard.key_down.r
 end
 
 def update(args)
@@ -177,7 +185,7 @@ def render_ui(args)
 end
 
 def render_survival_time(args)
-  survival_time = args.state.tick_count / 60  # Convert ticks to seconds
+  survival_time = (args.state.tick_count - args.state.start_tick_count) / 60  # Convert ticks to seconds
   minutes = survival_time / 60
   seconds = survival_time % 60
   time_text = format('%02d:%02d', minutes, seconds)
