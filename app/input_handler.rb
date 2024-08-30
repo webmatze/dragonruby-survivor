@@ -13,8 +13,15 @@ class InputHandler
       mouse_x = args.inputs.mouse.x + args.state.camera.x
       mouse_y = args.inputs.mouse.y + args.state.camera.y
       angle = Math.atan2(mouse_y - player.y, mouse_x - player.x)
-      player.x += Math.cos(angle) * player.speed
-      player.y += Math.sin(angle) * player.speed
+      dx = Math.cos(angle) * player.speed
+      dy = Math.sin(angle) * player.speed
+      player.x += dx
+      player.y += dy
+
+      # Flip player horizontally based on mouse movement direction
+      if dx.abs > 0.01  # Small threshold to avoid flipping on tiny movements
+        player.flip_horizontally = dx < 0
+      end
     end
 
     # Keep player within map bounds
