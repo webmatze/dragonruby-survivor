@@ -29,9 +29,26 @@ class StateUpdater
 
   def spawn_enemies(args)
     if args.state.enemies.length < 1000 && args.state.tick_count % 20 == 0
+      # Calculate the camera's viewport
+      viewport = {
+        left: args.state.camera.x,
+        right: args.state.camera.x + 1280,
+        top: args.state.camera.y + 720,
+        bottom: args.state.camera.y
+      }
+
+      # Generate a random position outside the viewport
+      x = y = 0
+      loop do
+        x = rand(args.state.map.width)
+        y = rand(args.state.map.height)
+        break unless x.between?(viewport[:left], viewport[:right]) &&
+                   y.between?(viewport[:bottom], viewport[:top])
+      end
+
       args.state.enemies << {
-        x: rand(args.state.map.width),
-        y: rand(args.state.map.height),
+        x: x,
+        y: y,
         w: 16, h: 16, speed: 0.3, hp: 1
       }
     end
