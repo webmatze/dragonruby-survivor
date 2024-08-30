@@ -20,13 +20,16 @@ class Renderer
   end
 
   def render_player(args)
-    args.outputs.sprites << [
-      args.state.player.x - args.state.camera.x,
-      args.state.player.y - args.state.camera.y,
-      args.state.player.w,
-      args.state.player.h,
-      'sprites/player.png'
-    ]
+    player = args.state.player
+
+    args.outputs.sprites << {
+      x: player.x - args.state.camera.x,
+      y: player.y - args.state.camera.y,
+      w: player.w,
+      h: player.h,
+      path: 'sprites/player.png',
+      flip_horizontally: player.flip_horizontally
+    }
   end
 
   def render_enemies(args)

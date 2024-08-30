@@ -21,6 +21,13 @@ class InputHandler
     player.x = player.x.clamp(0, args.state.map.width - player.w)
     player.y = player.y.clamp(0, args.state.map.height - player.h)
 
+    # Flip player horizontally based on left/right input
+    if args.inputs.left_right == -1
+      player.flip_horizontally = true
+    elsif args.inputs.left_right == 1
+      player.flip_horizontally = false
+    end
+
     # Restart the game when 'R' key is pressed
     restart(args) if args.inputs.keyboard.key_down.r
   end
