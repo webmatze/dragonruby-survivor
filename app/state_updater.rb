@@ -57,8 +57,23 @@ class StateUpdater
   def move_enemies(args)
     args.state.enemies.each do |enemy|
       angle = Math.atan2(args.state.player.y - enemy.y, args.state.player.x - enemy.x)
-      enemy.x += Math.cos(angle) * enemy.speed
-      enemy.y += Math.sin(angle) * enemy.speed
+      new_x = enemy.x + Math.cos(angle) * enemy.speed
+      new_y = enemy.y + Math.sin(angle) * enemy.speed
+
+      # Check if there's a collision at the new position
+      collision = args.state.enemies.any? do |other_enemy|
+        next if enemy == other_enemy
+        args.geometry.intersect_rect?(
+          { x: new_x, y: new_y, w: enemy.w, h: enemy.h },
+          other_enemy
+        )
+      end
+
+      # Only move the enemy if there's no collision
+      unless collision
+        enemy.x = new_x
+        enemy.y = new_y
+      end
     end
   end
 
